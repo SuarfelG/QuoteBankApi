@@ -24,10 +24,7 @@ class QouteSchema(Schema):
     quote=fields.String()
     author=fields.String()
     
-
 quote_schema=QouteSchema()
-
-
 
 class QouteResource(Resource):
   def get(self,id):
@@ -42,9 +39,9 @@ class QouteResource(Resource):
     print(data)
     qouteData=quote_schema.load(data)
     if not qouteData:
-      abort(500 , message='can not process request')
+      abort(404 , message='can not process request')
     else:
-        newquote=QuoteBank(quote=qouteData['quote'],author=qouteData['author'])
+        newquote=QuoteBank(**qouteData)
         db.session.add(newquote)
         db.session.commit()
         return quote_schema.dump(newquote)
